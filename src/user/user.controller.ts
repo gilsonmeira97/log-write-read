@@ -15,7 +15,7 @@ export class UserController {
     let response: ResponseEntity = new ResponseEntity();
     const userValidator: UserValidator = new UserValidator();
 
-    if(await this.userService.isInstalled()) return res.status(401).json(response.addMsg("This rute is disabled."))
+    if(await this.userService.isInstalled()) return res.status(401).json(response.addMsg("This service is disabled."))
 
     userValidator.createUser(createUserDto);
 
