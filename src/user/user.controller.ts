@@ -14,6 +14,9 @@ export class UserController {
   async create(@Body() createUserDto: CreateUserRequest, @Res() res: Response) {
     let response: ResponseEntity = new ResponseEntity();
     const userValidator: UserValidator = new UserValidator();
+
+    if(await this.userService.isInstalled()) return res.status(401).json(response.addMsg("This rute is disabled."))
+
     userValidator.createUser(createUserDto);
 
     if (userValidator.hasError()) {

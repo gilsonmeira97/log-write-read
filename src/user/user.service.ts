@@ -26,7 +26,6 @@ export class UserService {
 
   private async verifyIfUserExists(userRequest: CreateUserRequest) {
     const user = await this.prisma.user.findFirst({where: {email: userRequest.email} });
-    console.log(user)
     if(user != null) return ResponseEntity.error(["Email is already in use."])
     else return new ResponseEntity()
   }
@@ -44,6 +43,10 @@ export class UserService {
     } catch(error: any) {
       return response.setMsg(["Error to create new user.", error.message])
     }
-    
+  }
+  
+  async isInstalled() {
+    const totalUsers = await this.prisma.user.count();
+    return totalUsers != 0
   }
 }
