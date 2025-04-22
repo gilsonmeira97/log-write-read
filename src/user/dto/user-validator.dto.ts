@@ -23,20 +23,20 @@ export class UserValidator {
     }
 
     name(name: string) {
-        if (name == null || name.length < 5) this.appendMsg("Nome inválido - Deve conter ao menos 5 caracteres.")
+        if (name == null || name.length < 5) this.appendMsg("Invalid name - Must contain at least 5 characters.")
         return this;
     }
     
     email(email: string) {
         if (email == null || !email.match("^[\\w.-]+@([a-zA-Z-]+\\.)+[a-zA-Z]{2,}$")) {
-            this.appendMsg("Email inválido - Deve seguir o padrão example@example.com");
+            this.appendMsg("Invalid email - Must follow the pattern example@example.com");
         }
         return this;
     }
 
     password(password: string) {
         if (password == null || password.length < 8) {
-            this.appendMsg("Senha inválida - Deve ter pelo menos 8 caracteres.");
+            this.appendMsg("Invalid password - Must be at least 8 characters long.");
         }
         return this;
     }
