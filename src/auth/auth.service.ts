@@ -13,7 +13,7 @@ export class AuthService {
         const response: ResponseEntity = new ResponseEntity();
         const findedUser = await this.prisma.user.findUnique({where: {email: email}});
 
-        if(!!findedUser && await bcrypt.compare(password, findedUser.password)) {
+        if(findedUser && await bcrypt.compare(password, findedUser.password)) {
             return response.setData(true);
         } else {
             return response.addMsg("Email or password invalid.");
