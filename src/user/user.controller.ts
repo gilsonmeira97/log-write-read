@@ -8,28 +8,22 @@ import { ResponseEntity } from './entities/ResponseEntity.entity';
 
 @Controller('api')
 export class UserController {
-  constructor(private readonly userService: UserService) {}
+  constructor(private readonly userService: UserService) { }
 
   @Post("/install")
-  create(@Body() createUserDto: CreateUserRequest, @Res() res: Response) {
+  async create(@Body() createUserDto: CreateUserRequest, @Res() res: Response) {
+    let response: ResponseEntity = new ResponseEntity();
     const userValidator: UserValidator = new UserValidator();
     userValidator.createUser(createUserDto);
 
-    if(userValidator.hasError()){
-      return res.status(HttpStatus.BAD_REQUEST).json(ResponseEntity.error(userValidator.messages))
+    if (userValidator.hasError()) {
+      response.setMsg(userValidator.messages);
+      return res.status(HttpStatus.BAD_REQUEST).json(response)
     }
-    
-    return this.userService.create(createUserDto);
-  }
 
-  @Get()
-  findAll() {
-    return this.userService.findAll();
-  }
+    response = await this.userService.create(createUserDto);
+    return res.status(response.hasMessage() ? 400 : 200).json(response)
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.userService.findOne(+id);
   }
 
   @Patch(':id')
@@ -37,8 +31,4 @@ export class UserController {
     return this.userService.update(+id, updateUserDto);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.userService.remove(+id);
-  }
 }
