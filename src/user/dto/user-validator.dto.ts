@@ -1,3 +1,4 @@
+import { LoginUserRequest } from "src/auth/dto/login-user.dto";
 import { CreateUserRequest } from "./create-user.dto";
 
 export class UserValidator {
@@ -5,8 +6,12 @@ export class UserValidator {
 
     createUser(user: CreateUserRequest) {
         this.name(user.name).email(user.email).password(user.password);
+        return this;
+    }
 
-        return this.messages;
+    loginUser(user: LoginUserRequest) {
+        this.email(user.email).password(user.password);
+        return this;
     }
 
     appendMsg(msg: string) {
