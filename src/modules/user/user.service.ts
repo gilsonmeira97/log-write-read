@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { CreateUserRequest } from './dto/create-user.dto';
 import { UpdateUserRequest } from './dto/update-user.dto';
 import { PrismaService } from 'src/prisma.service';
-import { ResponseEntity } from './entities/ResponseEntity.entity';
+import { ResponseEntity } from '../../common/entities/ResponseEntity.entity';
 import { User } from './entities/User.entity';
 import * as bcrypt from 'bcrypt';
 
