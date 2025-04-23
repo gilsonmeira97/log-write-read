@@ -1,37 +1,43 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Res, HttpStatus } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Res, HttpStatus, Req } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserRequest } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
+import { UpdateUserRequest } from './dto/update-user.dto';
 import { UserValidator } from './dto/user-validator.dto';
-import { Response } from 'express';
+import { Request, Response } from 'express';
 import { ResponseEntity } from './entities/ResponseEntity.entity';
+import { Public } from 'src/decorators/public.decorator';
+import { LoginUserRequest } from 'src/auth/dto/login-user.dto';
+import { User } from './entities/User.entity';
+import { UserAuth } from 'src/decorators/userAuth.decorator';
 
-@Controller('api')
+@Controller("api/")
 export class UserController {
   constructor(private readonly userService: UserService) { }
 
-  @Post("/install")
+  @Public()
+  @Post("install")
   async create(@Body() createUserDto: CreateUserRequest, @Res() res: Response) {
     let response: ResponseEntity = new ResponseEntity();
     const userValidator: UserValidator = new UserValidator();
 
-    if(await this.userService.isInstalled()) return res.status(401).json(response.addMsg("This service is disabled."))
+    if(await this.userService.isInstalled()) return res.status(401).json(response.addMsg("This service is disabled."));
 
     userValidator.createUser(createUserDto);
 
     if (userValidator.hasError()) {
       response.setMsg(userValidator.messages);
-      return res.status(HttpStatus.BAD_REQUEST).json(response)
+      return res.status(HttpStatus.BAD_REQUEST).json(response);
     }
 
     response = await this.userService.create(createUserDto);
-    return res.status(response.hasMessage() ? 400 : 200).json(response)
+    return res.status(response.hasMessage() ? 400 : 200).json(response);
 
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    return this.userService.update(+id, updateUserDto);
+  @Patch("user")
+  update(@Body() userRequest: UpdateUserRequest, @UserAuth() userAuth) {
+    // TODO CREATE IMPLEMENT THIS UPDATE METHOD.
+    return this.userService.update(userRequest);
   }
 
 }
