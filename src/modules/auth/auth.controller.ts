@@ -1,8 +1,8 @@
 import { Body, Controller, Post, Res } from '@nestjs/common';
-import { UserValidator } from 'src/user/dto/user-validator.dto';
+import { UserValidator } from '../../common/validators/user.validator';
 import { LoginUserRequest } from './dto/login-user.dto';
 import { Response } from 'express';
-import { ResponseEntity } from 'src/user/entities/ResponseEntity.entity';
+import { ResponseEntity } from 'src/common/entities/ResponseEntity.entity';
 import { AuthService } from './auth.service';
 import { Public } from 'src/decorators/public.decorator';
 

@@ -1,5 +1,5 @@
-import { LoginUserRequest } from "src/auth/dto/login-user.dto";
-import { CreateUserRequest } from "./create-user.dto";
+import { LoginUserRequest } from "src/modules/auth/dto/login-user.dto";
+import { CreateUserRequest } from "../../modules/user/dto/create-user.dto";
 
 export class UserValidator {
     messages: string[] = []

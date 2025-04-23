@@ -2,11 +2,11 @@ import { Controller, Get, Post, Body, Patch, Param, Delete, Res, HttpStatus, Req
 import { UserService } from './user.service';
 import { CreateUserRequest } from './dto/create-user.dto';
 import { UpdateUserRequest } from './dto/update-user.dto';
-import { UserValidator } from './dto/user-validator.dto';
+import { UserValidator } from '../../common/validators/user.validator';
 import { Request, Response } from 'express';
-import { ResponseEntity } from './entities/ResponseEntity.entity';
+import { ResponseEntity } from '../../common/entities/ResponseEntity.entity';
 import { Public } from 'src/decorators/public.decorator';
-import { LoginUserRequest } from 'src/auth/dto/login-user.dto';
+import { LoginUserRequest } from 'src/modules/auth/dto/login-user.dto';
 import { User } from './entities/User.entity';
 import { UserAuth } from 'src/decorators/userAuth.decorator';
 

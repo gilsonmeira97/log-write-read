@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma.service';
-import { ResponseEntity } from 'src/user/entities/ResponseEntity.entity';
+import { ResponseEntity } from 'src/common/entities/ResponseEntity.entity';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import { LoginUserRequest } from './dto/login-user.dto';
