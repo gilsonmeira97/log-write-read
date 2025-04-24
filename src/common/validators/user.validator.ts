@@ -1,5 +1,6 @@
 import { LoginUserRequest } from "src/modules/auth/dto/login-user.dto";
 import { CreateUserRequest } from "../../modules/user/dto/create-user.dto";
+import { UpdateUserRequest } from "src/modules/user/dto/update-user.dto";
 
 export class UserValidator {
     messages: string[] = []
@@ -11,6 +12,12 @@ export class UserValidator {
 
     loginUser(user: LoginUserRequest) {
         this.email(user.email).password(user.password);
+        return this;
+    }
+
+    updateUser(user: UpdateUserRequest) {
+        user.name ? this.name(user.name) : false;
+        user.password ? this.password(user.password) : false;
         return this;
     }
 

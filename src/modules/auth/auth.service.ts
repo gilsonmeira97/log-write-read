@@ -4,6 +4,7 @@ import { ResponseEntity } from 'src/common/entities/ResponseEntity.entity';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import { LoginUserRequest } from './dto/login-user.dto';
+import { UserToken } from './entities/UserToken';
 
 @Injectable()
 export class AuthService {
@@ -14,7 +15,7 @@ export class AuthService {
         const findedUser = await this.prisma.user.findUnique({ where: { email: loginUser.email } });
 
         if (findedUser && await bcrypt.compare(loginUser.password, findedUser.password)) {
-            const payload = { sub: findedUser.id, email: findedUser.email };
+            const payload: UserToken = { id: findedUser.id, email: findedUser.email };
             return response.setData(await this.jwtService.signAsync(payload));
         } else {
             return response.addMsg("Email or password invalid.");

@@ -7,8 +7,8 @@ import { Request, Response } from 'express';
 import { ResponseEntity } from '../../common/entities/ResponseEntity.entity';
 import { Public } from 'src/decorators/public.decorator';
 import { LoginUserRequest } from 'src/modules/auth/dto/login-user.dto';
-import { User } from './entities/User.entity';
 import { UserAuth } from 'src/decorators/userAuth.decorator';
+import { UserToken } from '../auth/entities/UserToken';
 
 @Controller("api/")
 export class UserController {
@@ -16,28 +16,31 @@ export class UserController {
 
   @Public()
   @Post("install")
-  async create(@Body() createUserDto: CreateUserRequest, @Res() res: Response) {
+  async create(@Body() createUserRequest: CreateUserRequest, @Res() res: Response) {
     let response: ResponseEntity = new ResponseEntity();
-    const userValidator: UserValidator = new UserValidator();
+    const userValidator: UserValidator = new UserValidator().createUser(createUserRequest);
 
     if(await this.userService.isInstalled()) return res.status(401).json(response.addMsg("This service is disabled."));
 
-    userValidator.createUser(createUserDto);
-
     if (userValidator.hasError()) {
-      response.setMsg(userValidator.messages);
-      return res.status(HttpStatus.BAD_REQUEST).json(response);
+      return res.status(HttpStatus.BAD_REQUEST).json(response.setMsg(userValidator.messages));
     }
 
-    response = await this.userService.create(createUserDto);
+    response = await this.userService.create(createUserRequest);
     return res.status(response.hasMessage() ? 400 : 200).json(response);
 
   }
 
   @Patch("user")
-  update(@Body() userRequest: UpdateUserRequest, @UserAuth() userAuth) {
-    // TODO CREATE IMPLEMENT THIS UPDATE METHOD.
-    return this.userService.update(userRequest);
-  }
+  async update(@Body() updateUserRequest: UpdateUserRequest, @UserAuth() userToken: UserToken, @Res() res) {
+    let response: ResponseEntity = new ResponseEntity();
+    const userValidator: UserValidator = new UserValidator().updateUser(updateUserRequest);
 
+    if (userValidator.hasError()) {
+      return res.status(HttpStatus.BAD_REQUEST).json(response.setMsg(userValidator.messages));
+    }
+    // TODO CREATE IMPLEMENT THIS UPDATE METHOD.
+    response = await this.userService.update(updateUserRequest, userToken)
+    return res.status(response.hasMessage() ? 500 : 200).json(response);
+  }
 }
